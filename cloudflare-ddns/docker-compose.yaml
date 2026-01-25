@@ -16,6 +16,15 @@ services:
       - SUBDOMAIN=wg
       - PROXIED=false
 
+  dash-julenoctavio-com:
+    image: oznu/cloudflare-ddns:latest
+    restart: always
+    environment:
+      - API_KEY=$CF_KEY
+      - ZONE=julenoctavio.com
+      - SUBDOMAIN=dash
+      - PROXIED=true
+
   test-julenoctavio-com:
     image: oznu/cloudflare-ddns:latest
     restart: always
