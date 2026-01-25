@@ -15,3 +15,12 @@ services:
       - ZONE=julenoctavio.com
       - SUBDOMAIN=wg
       - PROXIED=false
+
+  test-julenoctavio-com:
+    image: oznu/cloudflare-ddns:latest
+    restart: always
+    environment:
+      - API_KEY=$CF_KEY
+      - ZONE=julenoctavio.com
+      - SUBDOMAIN=test
+      - PROXIED=false
