@@ -23,4 +23,4 @@ services:
       - API_KEY=$CF_KEY
       - ZONE=julenoctavio.com
       - SUBDOMAIN=test
-      - PROXIED=false
+      - PROXIED=true
