@@ -4,7 +4,7 @@ services:
     container_name: wg-easy         # Name of the container.
     environment:                    # Environment variables to configure the instance.
       - LANG=en                     # Language settings.
-      - WG_HOST=wg.jonyservices.com    # Public IP or domain name where WG-Easy is accessible.
+      - WG_HOST=wg.julenoctavio.com    # Public IP or domain name where WG-Easy is accessible.
       - PORT=51821                  # Port for the web interface.
       - WG_PORT=51820               # WireGuard port for VPN traffic.
       - WG_DEFAUL_DNS=$LOCAL_IP     # DNS
