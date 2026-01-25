@@ -16,13 +16,13 @@ services:
       - SUBDOMAIN=wg
       - PROXIED=false
 
-  dash-julenoctavio-com:
+  srv-julenoctavio-com:
     image: oznu/cloudflare-ddns:latest
     restart: always
     environment:
       - API_KEY=$CF_KEY
       - ZONE=julenoctavio.com
-      - SUBDOMAIN=dash
+      - SUBDOMAIN=srv
       - PROXIED=true
 
   test-julenoctavio-com:
