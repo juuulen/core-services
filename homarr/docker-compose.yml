@@ -9,6 +9,6 @@ services:
       - ./icons:/app/public/icons  # Required: Persists custom icons.
       - ./data:/data  # Required: Persists database and other data.
     environment:
-      - SECRET_ENCRYPTION_KEY=${SECRET_ENCRYPTION_KEY}  # Your new secure key.
+      - SECRET_ENCRYPTION_KEY=$SECRET_ENCRYPTION_KEY  # Your new secure key.
     ports:
       - '7575:7575'  # Maps Homarr to http://localhost:7575 (change the left side if port 7575 is in use, e.g., due to other services like Dash on 88).
