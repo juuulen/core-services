@@ -1,0 +1,93 @@
+version: '3.8'
+
+volumes:
+  n8n_storage:
+  postgres_storage:
+  qdrant_storage:
+  ollama_storage:
+
+networks:
+  ai_network:
+
+services:
+  qdrant:
+    image: qdrant/qdrant
+    container_name: qdrant
+    networks:
+      - ai_network
+    restart: always
+    ports:
+      - "6333:6333"
+    environment:
+      - QDRANT__SERVICE__API_KEY=$QDRANT_API_KEY
+    volumes:
+      - qdrant_storage:/qdrant/storage
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+    networks:
+      - ai_network
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - POSTGRES_DB=$POSTGRES_DB
+    volumes:
+      - postgres_storage:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h localhost -U $POSTGRES_USER -d $POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  n8n:
+    image: docker.n8n.io/n8nio/n8n
+    container_name: n8n
+    networks:
+      - ai_network
+    restart: always
+    ports:
+      - "5678:5678"
+    environment:
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=postgres
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_DATABASE=$POSTGRES_DB
+      - DB_POSTGRESDB_USER=$POSTGRES_USER
+      - DB_POSTGRESDB_PASSWORD=$POSTGRES_PASSWORD
+      - N8N_ENCRYPTION_KEY=$N8N_ENCRYPTION_KEY
+      - N8N_HOST=$N8N_HOST
+      - WEBHOOK_URL=http://$N8N_HOST:5678/
+      - N8N_SECURE_COOKIE=false
+    links:
+      - postgres
+      - qdrant
+      - ollama
+    depends_on:
+      postgres:
+        condition: service_healthy
+      qdrant:
+        condition: service_started
+    volumes:
+      - n8n_storage:/home/node/.n8n
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    networks:
+      - ai_network
+    restart: always
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_storage:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
