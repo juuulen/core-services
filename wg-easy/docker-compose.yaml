@@ -1,22 +1,22 @@
 services:
   wg-easy:
-    image: ghcr.io/wg-easy/wg-easy  # The Docker image to use.
-    container_name: wg-easy         # Name of the container.
-    environment:                    # Environment variables to configure the instance.
-      - LANG=en                     # Language settings.
-      - WG_HOST=wg.julenoctavio.com    # Public IP or domain name where WG-Easy is accessible.
-      - PORT=51821                  # Port for the web interface.
-      - WG_PORT=51820               # WireGuard port for VPN traffic.
-      - WG_DEFAULT_DNS=1.1.1.1      # DNS
+    image: ghcr.io/wg-easy/wg-easy
+    container_name: wg-easy
+    environment:
+      - LANG
+      - WG_HOST
+      - PORT
+      - WG_PORT
+      - WG_DEFAULT_DNS
     volumes:
       - $WG_PATH:/etc/wireguard
     ports:
-      - "51820:51820/udp"           # UDP port used by WireGuard.
-      - "51821:51821/tcp"           # TCP port for accessing the web interface.
-    cap_add:                        # Capabilities required for managing networking features.
+      - "51820:51820/udp"
+      - "51821:51821/tcp"
+    cap_add:
       - NET_ADMIN
       - SYS_MODULE
-    sysctls:                        # Kernel parameters that need to be set for WireGuard.
+    sysctls:
       - net.ipv4.conf.all.src_valid_mark=1
       - net.ipv4.ip_forward=1
-    restart: unless-stopped         # Ensures the container restarts automatically unless manually stopped.
+    restart: unless-stopped

@@ -4,11 +4,11 @@ services:
     image: ghcr.io/homarr-labs/homarr:latest
     restart: unless-stopped
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - $HOMARR_DATA_DIR/configs:/app/data/configs
-      - $HOMARR_DATA_DIR/icons:/app/public/icons
-      - $HOMARR_DATA_DIR/data:/data
+      - /var/run/docker.sock:/var/run/docker.sock  # Optional: Enables Docker integration (e.g., monitoring other containers like Dash or NPM). Remove if not needed.
+      - ./configs:/app/data/configs  # Required: Persists your Homarr configs.
+      - ./icons:/app/public/icons  # Required: Persists custom icons.
+      - ./data:/data  # Required: Persists database and other data.
     environment:
-      - SECRET_ENCRYPTION_KEY=$SECRET_ENCRYPTION_KEY
+      - SECRET_ENCRYPTION_KEY=$SECRET_ENCRYPTION_KEY  # Your new secure key.
     ports:
-      - '7575:7575'
+      - '7575:7575'  # Maps Homarr to http://localhost:7575 (change the left side if port 7575 is in use, e.g., due to other services like Dash on 88).
