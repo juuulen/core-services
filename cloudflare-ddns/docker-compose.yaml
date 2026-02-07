@@ -24,3 +24,12 @@ services:
       - ZONE=julenoctavio.com
       - SUBDOMAIN=srv
       - PROXIED=true
+
+  n8n-julenoctavio-com:
+    image: oznu/cloudflare-ddns:latest
+    restart: always
+    environment:
+      - API_KEY=$CF_KEY
+      - ZONE=julenoctavio.com
+      - SUBDOMAIN=n8n
+      - PROXIED=true
