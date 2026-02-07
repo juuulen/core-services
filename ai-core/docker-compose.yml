@@ -5,6 +5,7 @@ volumes:
   postgres_storage:
   qdrant_storage:
   ollama_storage:
+  open_webui_storage:
 
 networks:
   ai_network:
@@ -91,3 +92,18 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    networks:
+      - ai_network
+    restart: always
+    ports:
+      - "3000:8080"
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+    volumes:
+      - open_webui_storage:/app/backend/data
+    depends_on:
+      - ollama
